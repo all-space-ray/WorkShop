@@ -18,6 +18,7 @@ This repository is a workshop for ideas. Preserve that flexibility while keeping
 - **This repository is the template source of truth** for employee repos: `template-manifest.json` lists every universal file (regenerate with `python3 scripts/update-template-manifest.py`; `/improve-system` does this automatically; `check-repo.sh` fails if stale). Consumer repos pull with `/import-template` (`scripts/import-template.py`), which amends rather than replaces: modified files are staged to `.template-incoming/` for additive merge, and personal content (`os/log.md`, experiences, voice samples, career) is never exported. New users run `/initialize` for the system tour and personal setup; the full explainer is `docs/system-guide.md`.
 - When the user starts a discussion about creating a new program, product, or major task, follow the enforced workflow in `os/wiki/rules/program-workflow.md` (wayfinder -> spec -> tickets -> implement -> review; `/ask-matt` routes; grill-with-docs is the small-effort fallback). Not for simple research questions or quick fixes.
 - Session handoffs live in `GrabMe/` at the repo root (committed, so they survive across cloud agents). If `GrabMe/` contains a handoff addressed to your task, read it first, then delete it and commit the deletion.
+- Setup and testing progress is tracked in `docs/setup-test-checklist.md` (committed, persists across agents). When working on setup or validation, read it first and keep its checkboxes and Log current.
 - Enforced rules live in `os/wiki/rules/` (source of truth) and are exported to `.cursor/rules/*.mdc` by `scripts/sync-rules.py`. Cursor auto-attaches or agent-requests them so they apply only when relevant (no `alwaysApply` bloat). Edit the wiki page, then run `python3 scripts/sync-rules.py`; never hand-edit the generated `.mdc`. Writing rules in `os/wiki/rules/writing-style.md` apply to all generated text and documents.
 - Do not add a framework, package manager, or generated lockfile until a specific project requires it.
 - Keep secrets and local machine state out of git.
@@ -69,3 +70,17 @@ This repository has no traditional runtime service. The "application" is the age
 
 - **Cloud Agent VM desktop is viewable: run dev servers on it.** The Cloud Agent VM has a desktop the operator can see through the Cursor interface (Desktop tab), including a browser. So `localhost` on the VM **is** reachable by the user. To let Lindsay preview the site, start the dev server on the VM yourself in a persistent `tmux` session (`npm run dev` from the site's project directory), confirm it serves (`curl -s -o /dev/null -w '%{http_code}' http://localhost:3000`), and tell her to open/refresh `http://localhost:3000` in the Desktop tab. Do **not** claim the VM's localhost is unreachable. Dev mode hot-reloads, so after edits just tell her to refresh.
 - **User's preference: start the dev server automatically, don't wait to be asked.** Whenever you make changes to the site project, start (or confirm) the `npm run dev` server on the VM as part of the work, and tell her the URL to refresh. She controls the remote Desktop tab easily and prefers **not** to run bash commands themself, so never leave previewing as a manual step for them. (Reminder: don't run `npm run build` while dev is running, since it clobbers `.next`; stop dev, build, then restart it.)
+
+## Agent skills
+
+### Issue tracker
+
+Issues are tracked as GitHub issues on `all-space-ray/WorkShop` via the `gh` CLI; external PRs are not a triage surface. See `docs/agents/issue-tracker.md`.
+
+### Triage labels
+
+Default canonical vocabulary (`needs-triage`, `needs-info`, `ready-for-agent`, `ready-for-human`, `wontfix`). See `docs/agents/triage-labels.md`.
+
+### Domain docs
+
+Single-context: one `CONTEXT.md` plus `docs/adr/` at the repo root (created lazily by `/domain-modeling`). See `docs/agents/domain.md`.
