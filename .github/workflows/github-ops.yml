@@ -1,0 +1,74 @@
+name: GitHub ops executor
+
+# Token-free GitHub write proxy for read-only (Cloud Agent) environments.
+# An agent commits .github/ops/request.json describing a batch of write ops;
+# this workflow performs them with the built-in GITHUB_TOKEN (no user token),
+# and writes outcomes to .github/ops/results/<id>.json on a branch the agent reads.
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - .github/ops/request.json
+
+permissions:
+  issues: write
+  contents: write
+
+jobs:
+  execute:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Execute ops batch
+        run: |
+          set -euo pipefail
+          req=.github/ops/request.json
+          [ -f "$req" ] || { echo "no request file"; exit 0; }
+          id=$(jq -r '.id' "$req")
+          mkdir -p .github/ops/results
+          out=".github/ops/results/${id}.json"
+          echo '{"id":"'"$id"'","results":[]}' > "$out"
+          n=$(jq '.ops | length' "$req")
+          for i in $(seq 0 $((n-1))); do
+            op=$(jq -r ".ops[$i].op" "$req")
+            echo "== op $i: $op"
+            case "$op" in
+              create_issue)
+                title=$(jq -r ".ops[$i].title" "$req")
+                body=$(jq -r ".ops[$i].body // \"\"" "$req")
+                nonce=$(jq -r ".ops[$i].nonce // \"\"" "$req")
+                label=$(jq -r ".ops[$i].label // \"\"" "$req")
+                fb="$body
+
+ops-nonce: $nonce"
+                if [ -n "$label" ]; then
+                  url=$(gh issue create --title "$title" --body "$fb" --label "$label")
+                else
+                  url=$(gh issue create --title "$title" --body "$fb")
+                fi
+                num="${url##*/}"
+                echo "created nonce=$nonce number=$num"
+                jq --arg nonce "$nonce" --argjson num "$num" '.results += [{"op":"create_issue","nonce":$nonce,"number":$num}]' "$out" > "$out.tmp" && mv "$out.tmp" "$out"
+                ;;
+              comment)
+                num=$(jq -r ".ops[$i].issue" "$req"); b=$(jq -r ".ops[$i].body" "$req")
+                gh issue comment "$num" --body "$b" ;;
+              close)
+                num=$(jq -r ".ops[$i].issue" "$req"); c=$(jq -r ".ops[$i].comment // \"\"" "$req")
+                if [ -n "$c" ]; then gh issue close "$num" --comment "$c"; else gh issue close "$num"; fi ;;
+              *) echo "unknown op: $op" ;;
+            esac
+          done
+          echo "== results:"; cat "$out"
+      - name: Publish results
+        run: |
+          set -e
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .github/ops/results
+          git commit -m "ops results [skip ci]" || { echo "nothing to commit"; exit 0; }
+          git push
