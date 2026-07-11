@@ -1,12 +1,12 @@
 {
-  "id": "selftest-roundtrip-1",
+  "id": "selftest-roundtrip-2",
   "ops": [
     {
       "op": "create_issue",
       "title": "[ops-roundtrip] dynamic proxy test",
       "body": "Created by the GitHub ops executor from a committed request. Verifies the token-free write proxy round-trip.",
       "label": "needs-triage",
-      "nonce": "ops-nonce-rt-4a227a5"
+      "nonce": "ops-nonce-rt-2b7"
     }
   ]
 }
