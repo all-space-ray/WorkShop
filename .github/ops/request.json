@@ -1,17 +1,10 @@
 {
-  "id": "ops-20260711144059-2294",
+  "id": "ops-20260711144124-5689",
   "ops": [
     {
-      "op": "create_issue",
-      "title": "[proxy-final] batch test",
-      "body": "final verification of helper polling",
-      "label": "needs-triage",
-      "nonce": "final-7q2"
-    },
-    {
-      "op": "comment",
-      "issue": 6,
-      "body": "batch note (references prior closed issue, harmless)"
+      "op": "close",
+      "issue": 7,
+      "comment": "final proxy verification complete; closing."
     }
   ]
 }
