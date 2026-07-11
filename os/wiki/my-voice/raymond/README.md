@@ -15,20 +15,22 @@ Sample inventory for Raymond Tayse. The derived profile is [voice-profile.md](vo
 | Set | Date received | Origin | Count | Raw |
 |-----|---------------|--------|-------|-----|
 | Email, Sent folder (~2.5 yr) | 2026-07-11 | Claude.ai extraction | 52 samples | [raw](../../../raw/my-voice/raymond/2026-07-11-voice-samples-email.md) |
+| Email, Sent folder (~2.5 yr) | 2026-07-11 | Fable 5 Max extraction | 65 samples | [raw](../../../raw/my-voice/raymond/2026-07-11-voice-samples-email-fable5.md) |
 
-## Composition of the email set
+Both sets cover the same mailbox and overlap on several messages; the profile cites the first set with bare numbers and the Fable 5 set with an "F" prefix.
 
-- **Register:** ~38 professional, ~11 casual, ~3 terse.
-- **Audience:** government customers (Navy, Army), vendors and partners, internal peers, internal leadership (CRO, CEO, CCO, SVP), investors and board, IT.
+## Composition
+
+- **Register:** predominantly professional, with a meaningful share of terse one-word/one-line replies and occasional casual notes.
+- **Audience:** government customers (Navy, Army, USAF), vendors and partners, internal peers, internal leadership (CRO, CEO, CCO, SVP), investors and board, IT.
 - **Intent:** status updates and field-test reports, troubleshooting and technical explanation, requests and directives, feedback and candid pushback, thank-you and relationship notes, logistics and scheduling, analysis and persuasion, brief apology.
-- **Length:** a mix of one-line replies, short paragraphs, and long multi-section messages.
-- **Authorship:** 51 confirmed authored by Raymond; 1 flagged uncertain (a Word comment notification, sample 52).
+- **Length:** one-word and one-line replies through long multi-section messages.
+- **Authorship:** nearly all confirmed authored by Raymond; 1 flagged uncertain (a Word comment notification, first-set sample 52).
 
 ## Coverage gaps
 
-Almost all samples are defense/B2B work email. Missing or thin: external formal prose to non-government commercial partners, long persuasive/marketing copy he wrote himself, public announcements, and a substantive apology for a real error. See the profile's [Limits](voice-profile.md#limits).
+Both extractions independently flag the same gaps, which raises confidence in them: external-formal prose to non-government commercial partners, long persuasive/marketing copy he authored himself, public announcements, dedicated apology or bad-news emails, and cold outreach. See the profile's [Limits](voice-profile.md#limits).
 
 ## Pending
 
-- Second extraction via Fable 5 Max (for comparison against this set).
 - Curated Word-document samples, once Raymond confirms none contain other people's writing. Target these at the gaps above (longer authored prose, external/formal register).

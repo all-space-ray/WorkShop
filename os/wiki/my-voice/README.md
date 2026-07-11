@@ -38,4 +38,4 @@ Raw samples live in `os/raw/my-voice/<user-slug>/` (immutable, created on first 
 
 ## Users
 
-- [Raymond Tayse](raymond/README.md) - 52 email samples (~2.5 years, Sent folder); [voice profile](raymond/voice-profile.md) distilled. Defense/B2B work email; second extraction and Word-doc samples pending.
+- [Raymond Tayse](raymond/README.md) - two email extractions (52 + 65 samples, ~2.5 years, Sent folder); [voice profile](raymond/voice-profile.md) distilled from both. Defense/B2B work email; Word-doc samples pending.

@@ -33,5 +33,5 @@ An external AI harness (Claude.ai with mailbox access) read roughly 2.5 years of
 
 ## Follow-ups
 
-- Ingest the pending Fable 5 Max extraction as a second source, then reconcile any differences into the profile.
+- Done: the Fable 5 Max extraction was ingested as a [second source](2026-07-11-voice-samples-email-fable5.md) and reconciled into the profile (strong agreement, no contradictions).
 - Ingest the Word-document samples once Raymond confirms none contain other people's writing; these can fill the thin registers above (longer authored prose, external/formal).
