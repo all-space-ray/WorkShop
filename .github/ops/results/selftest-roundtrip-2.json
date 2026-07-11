@@ -1,0 +1,10 @@
+{
+  "id": "selftest-roundtrip-2",
+  "results": [
+    {
+      "op": "create_issue",
+      "nonce": "ops-nonce-rt-2b7",
+      "number": 5
+    }
+  ]
+}
