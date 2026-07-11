@@ -1,0 +1,86 @@
+name: Ops self-test
+
+# Proves which GitHub write operations the engineering skills need can be
+# performed by the built-in GITHUB_TOKEN inside Actions (no user token).
+# Triggered by pushing/editing .github/ops/selftest.trigger. Cleans up after itself.
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - .github/ops/selftest.trigger
+
+permissions:
+  issues: write
+  contents: read
+
+jobs:
+  selftest:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+      OWNER: ${{ github.repository_owner }}
+    steps:
+      - name: Exercise every needed write
+        run: |
+          set +e
+          pass=0; fail=0
+          note() { echo "----- $1"; }
+          check() { if [ "$1" -eq 0 ]; then echo "PASS: $2"; pass=$((pass+1)); else echo "FAIL($1): $2"; fail=$((fail+1)); fi; }
+
+          note "1. create a label (ops-selftest)"
+          gh label create ops-selftest --description "temp self-test" --color 999999 --force
+          check $? "gh label create"
+
+          note "2. create PARENT issue with a label"
+          PURL=$(gh issue create --title "[ops-selftest] parent" --body "temp map" --label ops-selftest)
+          rc=$?; echo "$PURL"; check $rc "gh issue create (parent)"
+          PARENT="${PURL##*/}"; echo "PARENT=$PARENT"
+
+          note "3. comment on PARENT"
+          gh issue comment "$PARENT" --body "self-test comment"
+          check $? "gh issue comment"
+
+          note "4. add then remove a label on PARENT"
+          gh issue edit "$PARENT" --add-label needs-triage && gh issue edit "$PARENT" --remove-label needs-triage
+          check $? "gh issue edit add/remove-label"
+
+          note "5. add assignee (repo owner user)"
+          gh issue edit "$PARENT" --add-assignee "$OWNER"
+          check $? "gh issue edit --add-assignee $OWNER"
+
+          note "6. create CHILD issue"
+          CURL=$(gh issue create --title "[ops-selftest] child" --body "temp child" --label ops-selftest)
+          rc=$?; echo "$CURL"; check $rc "gh issue create (child)"
+          CHILD="${CURL##*/}"; echo "CHILD=$CHILD"
+
+          note "7. resolve numeric database ids"
+          PARENT_DBID=$(gh api "repos/$GH_REPO/issues/$PARENT" --jq .id); echo "PARENT_DBID=$PARENT_DBID"
+          CHILD_DBID=$(gh api "repos/$GH_REPO/issues/$CHILD" --jq .id); echo "CHILD_DBID=$CHILD_DBID"
+          check $? "gh api read issue .id"
+
+          note "8. link CHILD as a sub-issue of PARENT"
+          gh api --method POST "repos/$GH_REPO/issues/$PARENT/sub_issues" -F sub_issue_id="$CHILD_DBID"
+          check $? "sub-issues API (POST sub_issues)"
+
+          note "9. list sub-issues of PARENT (read-back)"
+          gh api "repos/$GH_REPO/issues/$PARENT/sub_issues" --jq '.[].number'
+          check $? "sub-issues API (GET sub_issues)"
+
+          note "10. add dependency: CHILD blocked_by PARENT"
+          gh api --method POST "repos/$GH_REPO/issues/$CHILD/dependencies/blocked_by" -F issue_id="$PARENT_DBID"
+          check $? "dependencies API (POST blocked_by)"
+
+          note "11. read dependencies summary on CHILD"
+          gh api "repos/$GH_REPO/issues/$CHILD" --jq '.issue_dependencies_summary'
+          check $? "dependencies summary read"
+
+          note "cleanup: close both issues and delete temp label"
+          gh issue close "$CHILD" --comment "self-test cleanup" 2>/dev/null
+          gh issue close "$PARENT" --comment "self-test cleanup" 2>/dev/null
+          gh label delete ops-selftest --yes 2>/dev/null
+
+          echo "================= RESULT: pass=$pass fail=$fail ================="
+          # Do not fail the job on individual write failures; we want the full report.
+          exit 0
