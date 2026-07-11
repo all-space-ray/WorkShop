@@ -70,3 +70,17 @@ This repository has no traditional runtime service. The "application" is the age
 
 - **Cloud Agent VM desktop is viewable: run dev servers on it.** The Cloud Agent VM has a desktop the operator can see through the Cursor interface (Desktop tab), including a browser. So `localhost` on the VM **is** reachable by the user. To let Lindsay preview the site, start the dev server on the VM yourself in a persistent `tmux` session (`npm run dev` from the site's project directory), confirm it serves (`curl -s -o /dev/null -w '%{http_code}' http://localhost:3000`), and tell her to open/refresh `http://localhost:3000` in the Desktop tab. Do **not** claim the VM's localhost is unreachable. Dev mode hot-reloads, so after edits just tell her to refresh.
 - **User's preference: start the dev server automatically, don't wait to be asked.** Whenever you make changes to the site project, start (or confirm) the `npm run dev` server on the VM as part of the work, and tell her the URL to refresh. She controls the remote Desktop tab easily and prefers **not** to run bash commands themself, so never leave previewing as a manual step for them. (Reminder: don't run `npm run build` while dev is running, since it clobbers `.next`; stop dev, build, then restart it.)
+
+## Agent skills
+
+### Issue tracker
+
+Issues are tracked as GitHub issues on `all-space-ray/WorkShop` via the `gh` CLI; external PRs are not a triage surface. See `docs/agents/issue-tracker.md`.
+
+### Triage labels
+
+Default canonical vocabulary (`needs-triage`, `needs-info`, `ready-for-agent`, `ready-for-human`, `wontfix`). See `docs/agents/triage-labels.md`.
+
+### Domain docs
+
+Single-context: one `CONTEXT.md` plus `docs/adr/` at the repo root (created lazily by `/domain-modeling`). See `docs/agents/domain.md`.

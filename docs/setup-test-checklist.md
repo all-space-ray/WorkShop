@@ -14,7 +14,7 @@ Persistent, cross-agent tracker for validating the All-Space-Setup import and wa
 - [x] **Repo identity** - README description set (PR #2).
 - [~] **Voice and tone** - two email extractions ingested (Claude 52 + Fable 5 65), profile built at `os/wiki/my-voice/raymond/voice-profile.md`. Pending: curated Word-document samples once authorship is confirmed.
 - [ ] **PII / career** - optional. Ingest a resume into `os/wiki/career/` and/or add project domains via `/ingest-resource`.
-- [~] **Issue tracker** - `/setup-matt-pocock-skills` (GitHub, single-context). See `docs/agents/`.
+- [~] **Issue tracker** - `/setup-matt-pocock-skills` done: GitHub tracker, PRs off, default labels, single-context; config in `docs/agents/` and the `## Agent skills` block in `AGENTS.md`. Remaining: create the five GitHub labels once with write access (commands in `docs/agents/triage-labels.md`); this Cloud agent's `gh` is read-only.
 - [ ] **Update automation** - optional weekly `/import-template` scheduled agent to stay current with the template.
 
 ## System / feature testing (the UX walkthrough)
@@ -59,3 +59,4 @@ Persistent, cross-agent tracker for validating the All-Space-Setup import and wa
 ## Log
 
 - 2026-07-11: Created this checklist. Repo identity done; voice done for email (2 extractions), Word docs pending; started `/setup-matt-pocock-skills` (GitHub tracker, single-context).
+- 2026-07-11: `/setup-matt-pocock-skills` config complete - wrote `docs/agents/{issue-tracker,triage-labels,domain}.md` and the `## Agent skills` block in `AGENTS.md`. GitHub labels not yet created (Cloud `gh` is read-only); commands documented in `docs/agents/triage-labels.md`.
