@@ -1,6 +1,6 @@
 # WorkShop
 
-<One-line description of this repository.>
+Test repository for validating the import of the All-Space-Setup template and the associated post-install setup, walking through the full user experience.
 
 ## Repository structure
 
