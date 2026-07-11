@@ -44,8 +44,8 @@ deadline=$(( $(date +%s) + 240 ))
 status=""; conclusion=""
 while [ "$(date +%s)" -lt "$deadline" ]; do
   line=$(gh run list --limit 30 \
-    --json headSha,status,conclusion,workflowName \
-    --jq ".[] | select(.headSha==\"$sha\" and .workflowName==\"GitHub ops executor\") | \"\(.status) \(.conclusion)\"" 2>/dev/null | head -1 || true)
+    --json headSha,status,conclusion \
+    --jq ".[] | select(.headSha==\"$sha\") | \"\(.status) \(.conclusion)\"" 2>/dev/null | head -1 || true)
   status=$(printf '%s' "$line" | awk '{print $1}')
   conclusion=$(printf '%s' "$line" | awk '{print $2}')
   [ "${status:-}" = "completed" ] && break
