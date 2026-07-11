@@ -62,6 +62,9 @@ Catalog of every wiki page, grouped by section (folder). Read this first when an
 ## My Voice
 
 - [My Voice](wiki/my-voice/README.md) - writing samples and derived voice profiles.
+- [Raymond Tayse: voice samples](wiki/my-voice/raymond/README.md) - 52 email samples (~2.5 years) and their inventory.
+- [Raymond Tayse: voice profile](wiki/my-voice/raymond/voice-profile.md) - distilled writing style: operator-on-paper, professional-neutral baseline, invites correction, no em dashes.
+- [Source: Raymond email voice samples](wiki/my-voice/raymond/sources/2026-07-11-voice-samples-email.md) - 2.5 years of sent company email, AI-extracted and redacted.
 
 ## Career
 
