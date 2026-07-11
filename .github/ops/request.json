@@ -1,0 +1,12 @@
+{
+  "id": "ops-20260711143042-13137",
+  "ops": [
+    {
+      "op": "create_issue",
+      "title": "[proxy-smoke] helper script test",
+      "body": "Verifying scripts/github-ops.sh end to end.",
+      "label": "needs-triage",
+      "nonce": "smoke-9f3"
+    }
+  ]
+}
