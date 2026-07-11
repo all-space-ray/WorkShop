@@ -1,0 +1,27 @@
+.git/
+.cursor/index/
+
+# Local configuration and secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.crt
+
+# Dependencies and generated output
+node_modules/
+vendor/
+dist/
+build/
+coverage/
+.cache/
+.pytest_cache/
+__pycache__/
+*.pyc
+
+# OS and editor noise
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
