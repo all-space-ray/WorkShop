@@ -42,9 +42,7 @@ jobs:
                 body=$(jq -r ".ops[$i].body // \"\"" "$req")
                 nonce=$(jq -r ".ops[$i].nonce // \"\"" "$req")
                 label=$(jq -r ".ops[$i].label // \"\"" "$req")
-                fb="$body
-
-ops-nonce: $nonce"
+                fb=$(printf '%s\n\nops-nonce: %s' "$body" "$nonce")
                 if [ -n "$label" ]; then
                   url=$(gh issue create --title "$title" --body "$fb" --label "$label")
                 else
