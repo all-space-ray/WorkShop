@@ -1,0 +1,30 @@
+name: Setup triage labels
+
+# Creates the canonical triage labels the engineering skills expect.
+# Runs automatically when this file changes, and can be re-run manually
+# from the repo's Actions tab ("Run workflow"). Idempotent (--force).
+# Safe to delete once the labels exist.
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - .github/workflows/setup-triage-labels.yml
+
+permissions:
+  issues: write
+
+jobs:
+  labels:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+    steps:
+      - name: Create canonical triage labels
+        run: |
+          gh label create needs-triage    --description "Maintainer needs to evaluate this issue" --color FBCA04 --force
+          gh label create needs-info      --description "Waiting on reporter for more information" --color D876E3 --force
+          gh label create ready-for-agent --description "Fully specified, ready for an AFK agent"  --color 0E8A16 --force
+          gh label create ready-for-human --description "Requires human implementation"           --color 1D76DB --force
+          gh label create wontfix         --description "Will not be actioned"                     --color FFFFFF --force
