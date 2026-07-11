@@ -1,0 +1,10 @@
+{
+  "id": "ops-20260711143042-13137",
+  "results": [
+    {
+      "op": "create_issue",
+      "nonce": "smoke-9f3",
+      "number": 6
+    }
+  ]
+}
