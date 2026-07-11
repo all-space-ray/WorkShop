@@ -1,0 +1,249 @@
+#!/usr/bin/env python3
+"""Generate deterministic indexes for repository Cursor skills."""
+
+from __future__ import annotations
+
+import argparse
+import json
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[1]
+SKILLS_DIR = ROOT / ".cursor" / "skills"
+COMMANDS_DIR = ROOT / ".cursor" / "commands"
+TEAM_COMMANDS_PATH = ROOT / ".cursor" / "team-commands.txt"
+
+
+def read_text(path: Path) -> str:
+    return path.read_text(encoding="utf-8", errors="replace")
+
+
+def decode_scalar(value: str) -> str:
+    if len(value) < 2 or value[0] != value[-1]:
+        return value
+
+    if value[0] == '"':
+        try:
+            decoded = json.loads(value)
+        except json.JSONDecodeError:
+            return value[1:-1]
+        return decoded if isinstance(decoded, str) else value
+
+    if value[0] == "'":
+        return value[1:-1].replace("''", "'")
+
+    return value
+
+
+def parse_frontmatter_text(text: str) -> dict[str, str]:
+    lines = text.splitlines()
+
+    if not lines or lines[0].strip() != "---":
+        return {}
+
+    values: dict[str, str] = {}
+    frontmatter_lines: list[str] = []
+
+    for line in lines[1:]:
+        if line.strip() == "---":
+            break
+        frontmatter_lines.append(line)
+
+    index = 0
+
+    while index < len(frontmatter_lines):
+        line = frontmatter_lines[index]
+        index += 1
+
+        if line.startswith((" ", "\t")) or ":" not in line:
+            continue
+
+        key, value = line.split(":", 1)
+        key = key.strip()
+        value = value.strip()
+
+        if value in {"|", ">", "|-", ">-", "|+", ">+"}:
+            block_lines: list[str] = []
+
+            while index < len(frontmatter_lines):
+                next_line = frontmatter_lines[index]
+
+                if next_line and not next_line.startswith((" ", "\t")) and ":" in next_line:
+                    break
+
+                block_lines.append(next_line)
+                index += 1
+
+            value = " ".join(part.strip() for part in block_lines if part.strip())
+
+        value = decode_scalar(value)
+
+        values[key] = value
+
+    return values
+
+
+def parse_frontmatter(path: Path) -> dict[str, str]:
+    return parse_frontmatter_text(read_text(path))
+
+
+def run_self_test() -> None:
+    parsed = parse_frontmatter_text(
+        r'''---
+name: parser-test
+description: "Use \"deck,\" \"slides,\" and \\ paths."
+single: 'it''s fine'
+block: >
+  folded text
+  keeps words
+---
+Body ignored.
+'''
+    )
+
+    assert parsed["name"] == "parser-test"
+    assert parsed["description"] == 'Use "deck," "slides," and \\ paths.'
+    assert parsed["single"] == "it's fine"
+    assert parsed["block"] == "folded text keeps words"
+
+
+def load_team_commands() -> set[str]:
+    if not TEAM_COMMANDS_PATH.exists():
+        return set()
+
+    commands: set[str] = set()
+
+    for line in read_text(TEAM_COMMANDS_PATH).splitlines():
+        command = line.strip()
+        if not command or command.startswith("#"):
+            continue
+        commands.add(command)
+
+    return commands
+
+
+def command_description(command_path: Path) -> str:
+    frontmatter = parse_frontmatter(command_path)
+    return frontmatter.get("description", "")
+
+
+def build_index() -> dict[str, object]:
+    team_commands = load_team_commands()
+    skills: list[dict[str, object]] = []
+
+    for skill_file in sorted(SKILLS_DIR.glob("*/SKILL.md")):
+        skill_dir = skill_file.parent
+        directory_name = skill_dir.name
+        frontmatter = parse_frontmatter(skill_file)
+        skill_name = frontmatter.get("name", directory_name)
+        command_path = COMMANDS_DIR / f"{directory_name}.md"
+
+        skill_entry = {
+            "name": skill_name,
+            "directory": directory_name,
+            "description": frontmatter.get("description", ""),
+            "skill_path": skill_file.relative_to(ROOT).as_posix(),
+            "command": f"/{directory_name}" if command_path.exists() else None,
+            "command_path": command_path.relative_to(ROOT).as_posix() if command_path.exists() else None,
+            "command_description": command_description(command_path) if command_path.exists() else "",
+            "team_command": directory_name in team_commands,
+            "disable_model_invocation": frontmatter.get("disable-model-invocation", "") in {
+                True,
+                "true",
+                "True",
+            },
+        }
+
+        skills.append(skill_entry)
+
+    return {
+        "schema_version": 1,
+        "source": ".cursor/skills/*/SKILL.md",
+        "count": len(skills),
+        "skills": skills,
+    }
+
+
+def escape_markdown(value: object) -> str:
+    text = "" if value is None else str(value)
+    return text.replace("|", "\\|").replace("\n", " ")
+
+
+def render_markdown(index: dict[str, object]) -> str:
+    skills = index["skills"]
+    assert isinstance(skills, list)
+
+    lines = [
+        "# Cursor Skills Index",
+        "",
+        "Generated by `python3 scripts/reindex-skills.py` from `.cursor/skills/*/SKILL.md`.",
+        "",
+        f"Indexed skills: {index['count']}",
+        "",
+        "| Skill | Command | Team command | Slash menu | Description |",
+        "| --- | --- | --- | --- | --- |",
+    ]
+
+    for skill in skills:
+        assert isinstance(skill, dict)
+        team_command = "yes" if skill["team_command"] else "no"
+        slash_menu = "yes" if skill.get("disable_model_invocation") else "no"
+        lines.append(
+            "| "
+            + " | ".join(
+                [
+                    f"`{escape_markdown(skill['name'])}`",
+                    f"`{escape_markdown(skill['command'])}`" if skill["command"] else "",
+                    team_command,
+                    slash_menu,
+                    escape_markdown(skill["description"]),
+                ]
+            )
+            + " |"
+        )
+
+    lines.append("")
+    return "\n".join(lines)
+
+
+def write_index(output_dir: Path, quiet: bool) -> None:
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    index = build_index()
+    json_text = json.dumps(index, indent=2, sort_keys=True) + "\n"
+    markdown_text = render_markdown(index)
+
+    (output_dir / "index.json").write_text(json_text, encoding="utf-8")
+    (output_dir / "INDEX.md").write_text(markdown_text, encoding="utf-8")
+
+    if not quiet:
+        print(f"Indexed {index['count']} skills into {output_dir}")
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--self-test", action="store_true", help="Run parser self-tests and exit.")
+    parser.add_argument(
+        "--output-dir",
+        type=Path,
+        default=SKILLS_DIR,
+        help="Directory to write INDEX.md and index.json into.",
+    )
+    parser.add_argument("--quiet", action="store_true", help="Suppress summary output.")
+    return parser.parse_args()
+
+
+def main() -> None:
+    args = parse_args()
+
+    if args.self_test:
+        run_self_test()
+        if not args.quiet:
+            print("Parser self-test passed.")
+        return
+
+    write_index(args.output_dir, args.quiet)
+
+
+if __name__ == "__main__":
+    main()

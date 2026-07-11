@@ -1,0 +1,4 @@
+{
+  "install": "bash scripts/sync-cloud-agent-assets.sh",
+  "start": "echo 'Cloud agent ready (skills refreshed)'"
+}
