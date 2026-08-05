@@ -1,47 +1,55 @@
 {
-  "id": "ops-20260805155640-3193",
+  "id": "ops-20260805155710-13272",
   "ops": [
     {
-      "op": "create_issue",
-      "nonce": "zones-five",
-      "label": "wayfinder:grilling",
-      "title": "Which five Zones does the Timezone Board show?",
-      "body": "Part of #8\n\n## Question\n\nWhich five fixed Zones appear on the Timezone Board, and what city label and IANA timezone id does each use?\n\nRecommendation to accept unless overridden: London (`Europe/London`), New York (`America/New_York`), Los Angeles (`America/Los_Angeles`), Tokyo (`Asia/Tokyo`), Sydney (`Australia/Sydney`)."
+      "op": "sub_issue",
+      "parent": 8,
+      "child": 9
     },
     {
-      "op": "create_issue",
-      "nonce": "glance-behavior",
-      "label": "wayfinder:grilling",
-      "title": "What does the Glance view show and how does it update?",
-      "body": "Part of #8\n\n## Question\n\nFor each Zone on the Glance view, what information is shown, and how does the display stay current?\n\nRecommendation to accept unless overridden: city label, large local time (hours:minutes:seconds), weekday and date, and UTC offset; the clocks tick every second; no secondary panels, stats, or conversion tools on the Glance view."
+      "op": "sub_issue",
+      "parent": 8,
+      "child": 10
     },
     {
-      "op": "create_issue",
-      "nonce": "stack-deploy",
-      "label": "wayfinder:grilling",
-      "title": "What stack and deploy target for the Timezone Board demo?",
-      "body": "Part of #8\n\n## Question\n\nWhat implementation stack and deploy target should the eventual spec assume for this demo?\n\nRecommendation to accept unless overridden: Vite + vanilla TypeScript static site in the workshop repo (dedicated project folder), deployable as a static site (for example Render static or GitHub Pages). No backend, no package-manager sprawl beyond Vite."
+      "op": "sub_issue",
+      "parent": 8,
+      "child": 11
     },
     {
-      "op": "create_issue",
-      "nonce": "visual-direction",
-      "label": "wayfinder:grilling",
-      "title": "What visual direction for the Glance view?",
-      "body": "Part of #8\n\n## Question\n\nWhat visual direction should the Glance view follow so a prototype can be judged against something concrete?\n\nRecommendation to accept unless overridden: one full-bleed composition; brand/title \"Timezone Board\" as a hero-level signal; light cool slate palette with strong expressive typography; atmospheric background (gradient or subtle pattern, not flat fill); five Zones as the primary content after the title, not cards-in-a-dashboard. Avoid purple-on-white, cream-and-terracotta, broadsheet density, and default dark mode."
+      "op": "sub_issue",
+      "parent": 8,
+      "child": 12
     },
     {
-      "op": "create_issue",
-      "nonce": "ui-prototype",
-      "label": "wayfinder:prototype",
-      "title": "Rough Timezone Board UI prototype for reaction",
-      "body": "Part of #8\n\n## Question\n\nDoes a cheap, concrete Glance view prototype (layout, typography, five Zones live or mocked) feel right for the demo, and what must change before the product understanding is ready for `/to-spec`?\n\nRaise fidelity with `/prototype`. Link the prototype artifact from this issue. Keep the learning; disposable code may be deleted after the reaction is recorded."
+      "op": "sub_issue",
+      "parent": 8,
+      "child": 13
     },
     {
-      "op": "create_issue",
-      "nonce": "prototype-ready",
-      "label": "wayfinder:grilling",
-      "title": "Is the prototype ready for the product spec?",
-      "body": "Part of #8\n\n## Question\n\nAfter reacting to the Rough Timezone Board UI prototype, is the product understanding clear enough to leave this map and run `/to-spec` (then `/to-tickets`), or must another prototype/grilling pass happen first?\n\nRecommendation to accept unless overridden: if the prototype matches the closed decisions on Zones, Glance view behavior, and visual direction with only minor polish notes, declare the map complete and proceed to `/to-spec`."
+      "op": "sub_issue",
+      "parent": 8,
+      "child": 14
+    },
+    {
+      "op": "blocked_by",
+      "issue": 13,
+      "blocker": 9
+    },
+    {
+      "op": "blocked_by",
+      "issue": 13,
+      "blocker": 10
+    },
+    {
+      "op": "blocked_by",
+      "issue": 13,
+      "blocker": 12
+    },
+    {
+      "op": "blocked_by",
+      "issue": 14,
+      "blocker": 13
     }
   ]
 }
