@@ -1,0 +1,10 @@
+{
+  "id": "ops-20260805155601-9912",
+  "results": [
+    {
+      "op": "create_issue",
+      "nonce": "map-timezone-board",
+      "number": 8
+    }
+  ]
+}
