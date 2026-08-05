@@ -1,55 +1,10 @@
 {
-  "id": "ops-20260805155710-13272",
+  "id": "ops-20260805160209-4255",
   "ops": [
     {
-      "op": "sub_issue",
-      "parent": 8,
-      "child": 9
-    },
-    {
-      "op": "sub_issue",
-      "parent": 8,
-      "child": 10
-    },
-    {
-      "op": "sub_issue",
-      "parent": 8,
-      "child": 11
-    },
-    {
-      "op": "sub_issue",
-      "parent": 8,
-      "child": 12
-    },
-    {
-      "op": "sub_issue",
-      "parent": 8,
-      "child": 13
-    },
-    {
-      "op": "sub_issue",
-      "parent": 8,
-      "child": 14
-    },
-    {
-      "op": "blocked_by",
-      "issue": 13,
-      "blocker": 9
-    },
-    {
-      "op": "blocked_by",
-      "issue": 13,
-      "blocker": 10
-    },
-    {
-      "op": "blocked_by",
-      "issue": 13,
-      "blocker": 12
-    },
-    {
-      "op": "blocked_by",
-      "issue": 14,
-      "blocker": 13
+      "op": "assign",
+      "issue": 9,
+      "assignee": "all-space-ray"
     }
   ]
 }
