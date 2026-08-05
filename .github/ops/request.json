@@ -1,10 +1,20 @@
 {
-  "id": "ops-20260805160209-4255",
+  "id": "ops-20260805160246-18998",
   "ops": [
     {
-      "op": "assign",
+      "op": "comment",
       "issue": 9,
-      "assignee": "all-space-ray"
+      "body": "## Resolution\n\nAccepted the map's recommended five fixed Zones (demo preference: prefer agent recommendations).\n\n| City label | IANA timezone |\n|---|---|\n| London | `Europe/London` |\n| New York | `America/New_York` |\n| Los Angeles | `America/Los_Angeles` |\n| Tokyo | `Asia/Tokyo` |\n| Sydney | `Australia/Sydney` |\n\nZone labels are **city only** (not city + region). That clears the map fog item about Zone label copy tone.\n\nNo new tickets. No scope changes."
+    },
+    {
+      "op": "close",
+      "issue": 9,
+      "comment": "Resolved: five fixed Zones locked (see resolution comment)."
+    },
+    {
+      "op": "comment",
+      "issue": 8,
+      "body": "## Decisions so far (append)\n\n- [Which five Zones does the Timezone Board show?](https://github.com/all-space-ray/WorkShop/issues/9) — Five fixed Zones: London, New York, Los Angeles, Tokyo, Sydney (IANA ids on the ticket); city-only labels.\n\nAlso clear from **Not yet specified**: copy tone for Zone labels (settled as city only on that ticket)."
     }
   ]
 }
