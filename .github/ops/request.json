@@ -1,0 +1,42 @@
+{
+  "id": "ops-20260805155601-9912",
+  "ops": [
+    {
+      "op": "create_label",
+      "name": "wayfinder:map",
+      "description": "Wayfinder map issue (index for an effort)",
+      "color": "5319E7"
+    },
+    {
+      "op": "create_label",
+      "name": "wayfinder:research",
+      "description": "Wayfinder research ticket (AFK)",
+      "color": "BFD4F2"
+    },
+    {
+      "op": "create_label",
+      "name": "wayfinder:prototype",
+      "description": "Wayfinder prototype ticket (HITL)",
+      "color": "F9D0C4"
+    },
+    {
+      "op": "create_label",
+      "name": "wayfinder:grilling",
+      "description": "Wayfinder grilling ticket (HITL)",
+      "color": "FBCA04"
+    },
+    {
+      "op": "create_label",
+      "name": "wayfinder:task",
+      "description": "Wayfinder task ticket (unblocks a decision)",
+      "color": "C2E0C6"
+    },
+    {
+      "op": "create_issue",
+      "nonce": "map-timezone-board",
+      "label": "wayfinder:map",
+      "title": "Timezone Board: way to a demo-ready product understanding",
+      "body": "## Destination\n\nA shared product understanding of the Timezone Board (audience, five Zones, Glance view behavior, stack constraints) plus at least one UI prototype the owner has reacted to, clear enough that `/to-spec` and `/to-tickets` can run without open product fog. Implementation is out of scope on this map.\n\n## Notes\n\n- Domain: Timezone Board demo for a colleague. Glossary: root `CONTEXT.md`.\n- Skills every session should consult: `/grilling`, `/domain-modeling`; for the prototype ticket, `/prototype`.\n- Standing preference: this is a demonstration project. Prefer the agent's recommended answer on every grilling ticket and record that recommendation as the decision unless a human overrides it.\n- Framing already accepted while charting: personal utility only (no accounts, no sharing); five fixed Zones; single Glance view page.\n- Recommended defaults to propose when resolving tickets (not yet decided until their tickets close):\n  - Zones: London, New York, Los Angeles, Tokyo, Sydney.\n  - Glance view: city label, large local time, weekday/date, UTC offset; live tick every second.\n  - Stack: Vite static site (vanilla TypeScript), static hosting.\n  - Visual: light cool slate, strong typography, full-bleed atmospheric background; avoid purple-on-white, cream-and-terracotta, and default dark-mode looks.\n\n## Decisions so far\n\n<!-- the index — one line per closed ticket -->\n\n## Not yet specified\n\n- Exact responsive layout breakpoints and mobile composition after the first prototype reaction.\n- Accessibility and reduced-motion expectations once the visual direction is locked.\n- Copy tone for Zone labels (city only vs city + region).\n- Whether the live tick should pause when the tab is hidden (battery/perf detail).\n\n## Out of scope\n\n- Building or deploying the production site (starts after `/to-spec` and `/to-tickets`).\n- User accounts, auth, multi-user boards, or per-visitor configurable Zones.\n- Native apps, notifications, or timezone conversion calculators.\n- Adding more or fewer than five Zones in this effort."
+    }
+  ]
+}
